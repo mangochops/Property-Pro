@@ -2,7 +2,7 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Employee } from '@/constants/data';
 import { ColumnDef } from '@tanstack/react-table';
-import { CellAction } from './cell-action';
+import { CellAction } from '../expenses-tables/cell-action';
 
 export const columns: ColumnDef<Employee>[] = [
   {
@@ -26,23 +26,24 @@ export const columns: ColumnDef<Employee>[] = [
   },
   {
     accessorKey: 'first_name',
-    header: 'NAME'
-  },
-  {
-    accessorKey: 'country',
-    header: 'COUNTRY'
+    header: 'ROOM NO.'
   },
   {
     accessorKey: 'email',
-    header: 'EMAIL'
+    header: 'TENANT NAME'
   },
   {
+    accessorKey: 'country',
+    header: 'RENT AMOUNT'
+  },
+
+  {
     accessorKey: 'job',
-    header: 'COMPANY'
+    header: 'STATUS'
   },
   {
     accessorKey: 'gender',
-    header: 'GENDER'
+    header: 'PHONE NO.'
   },
   {
     id: 'actions',

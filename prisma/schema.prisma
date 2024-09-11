@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Billing {
+  Bill_id        Int        @id @default(autoincrement())
+  Bill_name      String?    @db.VarChar(255)
+  Bill_amount    Int?
+  Account_number String?    @db.VarChar(255)
+  Balance        Int?
+  PropertyId     Int
+  Due_date       DateTime?  @db.Date
+  Properties     Properties @relation(fields: [PropertyId], references: [PropertyId], onDelete: NoAction, onUpdate: NoAction, map: "Billing_ibfk_1")
+
+  @@index([PropertyId], map: "Billing_Id")
+}
+
+model Expenses {
+  ExpenseId      Int        @id @default(autoincrement())
+  Expense_name   String?    @db.VarChar(255)
+  Expense_amount Int?
+  Account_name   String?    @db.VarChar(255)
+  PropertyId     Int
+  Paid_date      DateTime?  @db.Date
+  Properties     Properties @relation(fields: [PropertyId], references: [PropertyId], onDelete: NoAction, onUpdate: NoAction, map: "Expenses_ibfk_1")
+
+  @@index([PropertyId], map: "Expenses_Id")
+}
+
+model Properties {
+  PropertyId        Int        @id @default(autoincrement())
+  Property_name     String?    @db.VarChar(255)
+  Property_location String?    @db.VarChar(255)
+  Property_units    String?    @db.VarChar(255)
+  UserId            Int
+  Billing           Billing[]
+  Expenses          Expenses[]
+  Users             Users      @relation(fields: [UserId], references: [UserId], onDelete: NoAction, onUpdate: NoAction, map: "Properties_ibfk_1")
+  Roles             Roles[]
+  Services          Services[]
+  Units             Units[]
+
+  @@index([UserId], map: "Owner_id")
+}
+
+model Rent {
+  RentId         Int       @id @default(autoincrement())
+  Unit_name      String?   @db.VarChar(255)
+  Status         Boolean?
+  Balance_Amount Int?
+  Paid_date      DateTime? @db.Date
+  TenantId       Int
+  Balance_Status Boolean?
+  Tenants        Tenants   @relation(fields: [TenantId], references: [Tenant_Id], onDelete: NoAction, onUpdate: NoAction, map: "Rent_ibfk_1")
+
+  @@index([TenantId], map: "Rental_Id")
+}
+
+model Roles {
+  Roles_Id     Int        @id @default(autoincrement())
+  Role_type    String?    @db.VarChar(255)
+  Name         String?    @db.VarChar(255)
+  Phone_number Int?
+  Salary       String?    @db.VarChar(255)
+  PropertyId   Int
+  Properties   Properties @relation(fields: [PropertyId], references: [PropertyId], onDelete: NoAction, onUpdate: NoAction, map: "Roles_ibfk_1")
+
+  @@index([PropertyId], map: "Workers_Id")
+}
+
+model Services {
+  Service_Id          Int        @id @default(autoincrement())
+  Service_name        String?    @db.VarChar(255)
+  Service_description String?    @db.Text
+  Service_amount      Int?
+  Status              Boolean?
+  Contact             String?    @db.VarChar(255)
+  PropertyId          Int
+  Date_paid           DateTime?  @db.Date
+  Properties          Properties @relation(fields: [PropertyId], references: [PropertyId], onDelete: NoAction, onUpdate: NoAction, map: "Services_ibfk_1")
+
+  @@index([PropertyId], map: "Services_Id")
+}
+
+model Tenants {
+  Tenant_Id      Int      @id @default(autoincrement())
+  Unit_name      String?  @db.VarChar(255)
+  Tenant_name    String?  @db.VarChar(255)
+  Unit_type      String?  @db.VarChar(255)
+  Phone_number   Int?
+  Rent_amount    Int?
+  Account_number String?  @db.VarChar(255)
+  Due_date       String?  @db.VarChar(255)
+  Balance        Boolean?
+  UnitId         Int
+  Rent           Rent[]
+  Units          Units    @relation(fields: [UnitId], references: [UnitId], onDelete: NoAction, onUpdate: NoAction, map: "Tenants_ibfk_1")
+
+  @@index([UnitId], map: "Tenants_Id")
+}
+
+model Units {
+  UnitId          Int         @id @default(autoincrement())
+  Unit_type       String?     @db.VarChar(255)
+  Unit_number     Int
+  Available_units Int?
+  PropertyId      Int?
+  Tenants         Tenants[]
+  Properties      Properties? @relation(fields: [PropertyId], references: [PropertyId], onDelete: NoAction, onUpdate: NoAction, map: "Units_ibfk_1")
+
+  @@index([PropertyId], map: "HouseId")
+}
+
+model Users {
+  UserId       Int          @id @default(autoincrement())
+  First_name   String       @db.VarChar(255)
+  Last_name    String       @db.VarChar(255)
+  Email        String?      @db.VarChar(255)
+  Phone_number Int?
+  Password     String?      @db.VarChar(255)
+  Properties   Properties[]
+}

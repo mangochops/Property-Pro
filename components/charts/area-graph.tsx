@@ -18,21 +18,22 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart';
 const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 }
+  { month: 'January', desktop: 86000, mobile: 18000 },
+  { month: 'February', desktop: 80000, mobile: 16000 },
+  { month: 'March', desktop: 94000, mobile: 12000 },
+  { month: 'April', desktop: 100000, mobile: 19000 },
+  { month: 'May', desktop: 94000, mobile: 13000 },
+  { month: 'June', desktop: 86000, mobile: 14000 },
+  { month: 'July', desktop: 96000, mobile: 15000 }
 ];
 
 const chartConfig = {
   desktop: {
-    label: 'Desktop',
+    label: 'Income',
     color: 'hsl(var(--chart-1))'
   },
   mobile: {
-    label: 'Mobile',
+    label: 'Expenses',
     color: 'hsl(var(--chart-2))'
   }
 } satisfies ChartConfig;
@@ -41,9 +42,9 @@ export function AreaGraph() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart - Stacked</CardTitle>
+        <CardTitle>Income Vs. Expense</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Showing total income for the last 6 months compared to the expenses
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -4,6 +4,7 @@ import { PieGraph } from '@/components/charts/pie-graph';
 import { CalendarDateRangePicker } from '@/components/date-range-picker';
 import PageContainer from '@/components/layout/page-container';
 import { RecentSales } from '@/components/recent-sales';
+import { Tenants } from '@/components/tenants';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -39,7 +40,7 @@ export default function page() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Total Revenue
+                    Total Units
                   </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -55,16 +56,16 @@ export default function page() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">$45,231.89</div>
+                  <div className="text-2xl font-bold">12</div>
                   <p className="text-xs text-muted-foreground">
-                    +20.1% from last month
+                    8 units are vacant
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Subscriptions
+                    Expected Rent
                   </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -82,15 +83,17 @@ export default function page() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+2350</div>
+                  <div className="text-2xl font-bold">Ksh. 100,000</div>
                   <p className="text-xs text-muted-foreground">
-                    +180.1% from last month
+                    Due on 5th each month
                   </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Sales</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Total Expenses
+                  </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -106,7 +109,7 @@ export default function page() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+12,234</div>
+                  <div className="text-2xl font-bold">Ksh. 4,000</div>
                   <p className="text-xs text-muted-foreground">
                     +19% from last month
                   </p>
@@ -115,7 +118,7 @@ export default function page() {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
-                    Active Now
+                    Total Billing
                   </CardTitle>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -131,22 +134,22 @@ export default function page() {
                   </svg>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-2xl font-bold">+573</div>
+                  <div className="text-2xl font-bold">Ksh. 40,000</div>
                   <p className="text-xs text-muted-foreground">
-                    +201 since last hour
+                    +201 since last month
                   </p>
                 </CardContent>
               </Card>
             </div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-7">
               <div className="col-span-4">
-                <BarGraph />
+                <AreaGraph />
               </div>
               <Card className="col-span-4 md:col-span-3">
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
+                  <CardTitle>Rent Paid</CardTitle>
                   <CardDescription>
-                    You made 265 sales this month.
+                    An overview of the tenants that have paid their rent.
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -154,7 +157,17 @@ export default function page() {
                 </CardContent>
               </Card>
               <div className="col-span-4">
-                <AreaGraph />
+                <Card className="col-span-4 md:col-span-3">
+                  <CardHeader>
+                    <CardTitle>Tenants</CardTitle>
+                    <CardDescription>
+                      An overview of all tenants in this property.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Tenants />
+                  </CardContent>
+                </Card>
               </div>
               <div className="col-span-4 md:col-span-3">
                 <PieGraph />

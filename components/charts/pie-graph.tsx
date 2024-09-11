@@ -19,11 +19,11 @@ import {
   ChartTooltipContent
 } from '@/components/ui/chart';
 const chartData = [
-  { browser: 'chrome', visitors: 275, fill: 'var(--color-chrome)' },
-  { browser: 'safari', visitors: 200, fill: 'var(--color-safari)' },
-  { browser: 'firefox', visitors: 287, fill: 'var(--color-firefox)' },
-  { browser: 'edge', visitors: 173, fill: 'var(--color-edge)' },
-  { browser: 'other', visitors: 190, fill: 'var(--color-other)' }
+  { browser: 'Water', visitors: 2750, fill: 'var(--color-chrome)' },
+  { browser: 'Wifi', visitors: 18000, fill: 'var(--color-safari)' },
+  { browser: 'Salaries', visitors: 29000, fill: 'var(--color-firefox)' },
+  { browser: 'Electricity', visitors: 10000, fill: 'var(--color-edge)' },
+  { browser: 'Garbage', visitors: 2000, fill: 'var(--color-other)' }
 ];
 
 const chartConfig = {
@@ -31,23 +31,23 @@ const chartConfig = {
     label: 'Visitors'
   },
   chrome: {
-    label: 'Chrome',
+    label: 'Water',
     color: 'hsl(var(--chart-1))'
   },
   safari: {
-    label: 'Safari',
+    label: 'Wifi',
     color: 'hsl(var(--chart-2))'
   },
   firefox: {
-    label: 'Firefox',
+    label: 'Salaries',
     color: 'hsl(var(--chart-3))'
   },
   edge: {
-    label: 'Edge',
+    label: 'Electricity',
     color: 'hsl(var(--chart-4))'
   },
   other: {
-    label: 'Other',
+    label: 'Garbage',
     color: 'hsl(var(--chart-5))'
   }
 } satisfies ChartConfig;
@@ -60,8 +60,8 @@ export function PieGraph() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Pie Chart showing your total spending</CardTitle>
+        <CardDescription>January - July 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -102,7 +102,7 @@ export function PieGraph() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Spent
                         </tspan>
                       </text>
                     );

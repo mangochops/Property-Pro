@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  frontend:
+    depends_on:
+      - authentication
+    build:
+      context: .
+      dockerfile: Dockerfile # Correct way to specify Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+    restart: always
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile # Specify the Dockerfile here
+    depends_on:
+      - database
+    ports:
+      - 3000:3000
+    environment:
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=rLcydvJSbxnrDOY2PhUJ+izC6Q/FyT1tlpiPoN5xc/Y=
+      - DB_HOST=database
+      - DB_PORT=3306
+      - DB_USER=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_DATABASE}
+    volumes:
+      - .:/app
+    restart: always
+
+  database:
+    image: mysql:8.0
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  authentication:
+    build:
+      context: .
+      dockerfile: Dockerfile # Specify the Dockerfile here
+    depends_on:
+      - database
+    ports:
+      - 3000:3000
+    environment:
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=rLcydvJSbxnrDOY2PhUJ+izC6Q/FyT1tlpiPoN5xc/Y=
+      - DB_HOST=database
+      - DB_PORT=3306
+      - DB_USER=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_DATABASE}
+    volumes:
+      - .:/app
+    restart: always
+
+volumes:
+  db_data:
