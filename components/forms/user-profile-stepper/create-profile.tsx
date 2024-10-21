@@ -1,193 +1,115 @@
 'use client';
-'use client';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger
-} from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Heading } from '@/components/ui/heading';
-import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
-import { Separator } from '@/components/ui/separator';
-import { profileSchema, type ProfileFormValues } from '@/lib/form-schema';
-import { cn } from '@/lib/utils';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Trash } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
-interface ProfileFormType {
-  initialData: ProfileFormValues | null;
-  categories: any;
+interface ProfileFormValues {
+  firstname: string;
+  lastname: string;
+  email: string;
+  contactno: number;
+  country: string;
+  city: string;
+  jobs: {
+    jobcountry: string;
+    jobcity: string;
+    jobtitle: string;
+    employer: string;
+    startdate: string;
+    enddate: string;
+  }[];
 }
 
-export const CreateProfileOne: React.FC<ProfileFormType> = ({
-  initialData,
-  categories
-}) => {
-  const params = useParams();
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+const profileSchema = Yup.object().shape({
+  firstname: Yup.string().required('First name is required'),
+  lastname: Yup.string().required('Last name is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  contactno: Yup.number().required('Contact number is required'),
+  country: Yup.string().required('Country is required'),
+  city: Yup.string().required('City is required'),
+  jobs: Yup.array()
+    .of(
+      Yup.object().shape({
+        jobcountry: Yup.string().required('Job country is required'),
+        jobcity: Yup.string().required('Job city is required'),
+        jobtitle: Yup.string().required('Job title is required'),
+        employer: Yup.string().required('Employer is required'),
+        startdate: Yup.string().required('Start date is required'),
+        enddate: Yup.string().required('End date is required')
+      })
+    )
+    .required('At least one job is required')
+});
 
-  const title = initialData ? 'Edit Profile' : 'Create Your Profile';
-  const description = initialData
-    ? 'Edit your profile details.'
-    : 'To create your resume, we first need some basic information about you.';
-
-  const action = initialData ? 'Save changes' : 'Create';
-
-  // Define defaultValues using initialData if available
-  const defaultValues: ProfileFormValues = initialData || {
+const CreateProfile: React.FC = () => {
+  const initialValues: ProfileFormValues = {
     firstname: '',
     lastname: '',
     email: '',
-    contactno: ''
+    contactno: 0,
+    country: '',
+    city: '',
+    jobs: []
   };
 
-  const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileSchema),
-    defaultValues, // Passing default values
-    mode: 'onChange'
-  });
-
-  const {
-    control,
-    formState: { errors }
-  } = form;
-
-  const processForm: SubmitHandler<ProfileFormValues> = (data) => {
-    console.log('data ==>', data);
-    // API call or action to handle the form submission
+  const onSubmit = (values: ProfileFormValues) => {
+    console.log(values);
+    // Handle form submission
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between">
-        <Heading title={title} description={description} />
-        {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => setOpen(true)}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
-        )}
-      </div>
-
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(processForm)}
-          className="w-full space-y-8 rounded-lg bg-white p-6 shadow-md dark:bg-gray-900"
-        >
-          <div className="gap-8 md:grid md:grid-cols-2">
-            {/* First Name */}
-            <FormField
-              control={form.control}
-              name="firstname"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="John"
-                      {...field}
-                      className="dark:bg-gray-800 dark:text-gray-300"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Last Name */}
-            <FormField
-              control={form.control}
-              name="lastname"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="Doe"
-                      {...field}
-                      className="dark:bg-gray-800 dark:text-gray-300"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Email */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="johndoe@gmail.com"
-                      {...field}
-                      className="dark:bg-gray-800 dark:text-gray-300"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {/* Contact Number */}
-            <FormField
-              control={form.control}
-              name="contactno"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contact Number</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter your contact number"
-                      disabled={loading}
-                      {...field}
-                      className="dark:bg-gray-800 dark:text-gray-300"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+    <Formik
+      initialValues={initialValues}
+      validationSchema={profileSchema}
+      onSubmit={onSubmit}
+    >
+      {({ isSubmitting }) => (
+        <Form>
+          <div>
+            <label>First Name</label>
+            <Field type="text" name="firstname" />
+            <ErrorMessage name="firstname" component="div" />
           </div>
 
-          <Button
-            type="submit"
-            className="ml-auto bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
-            disabled={loading}
-          >
-            {action}
-          </Button>
-        </form>
-      </Form>
-    </>
+          <div>
+            <label>Last Name</label>
+            <Field type="text" name="lastname" />
+            <ErrorMessage name="lastname" component="div" />
+          </div>
+
+          <div>
+            <label>Email</label>
+            <Field type="email" name="email" />
+            <ErrorMessage name="email" component="div" />
+          </div>
+
+          <div>
+            <label>Contact Number</label>
+            <Field type="number" name="contactno" />
+            <ErrorMessage name="contactno" component="div" />
+          </div>
+
+          <div>
+            <label>Country</label>
+            <Field type="text" name="country" />
+            <ErrorMessage name="country" component="div" />
+          </div>
+
+          <div>
+            <label>City</label>
+            <Field type="text" name="city" />
+            <ErrorMessage name="city" component="div" />
+          </div>
+
+          {/* Job fields can be rendered dynamically based on the jobs array */}
+          {/* You can add functionality to dynamically add/remove jobs */}
+
+          <button type="submit" disabled={isSubmitting}>
+            Submit
+          </button>
+        </Form>
+      )}
+    </Formik>
   );
 };
+
+export default CreateProfile;
