@@ -18,7 +18,10 @@ interface ProfileFormValues {
     enddate: string;
   }[];
 }
-
+interface CreateProfileProps {
+  categories: any[];
+  initialData: any | null;
+}
 const profileSchema = Yup.object().shape({
   firstname: Yup.string().required('First name is required'),
   lastname: Yup.string().required('Last name is required'),
@@ -40,7 +43,10 @@ const profileSchema = Yup.object().shape({
     .required('At least one job is required')
 });
 
-const CreateProfile: React.FC = () => {
+const CreateProfile: React.FC<CreateProfileProps> = ({
+  categories,
+  initialData
+}) => {
   const initialValues: ProfileFormValues = {
     firstname: '',
     lastname: '',
