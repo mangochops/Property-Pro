@@ -8,7 +8,7 @@ const breadcrumbItems = [
   { title: 'Billing', link: '/dashboard/billing' }
 ];
 export interface Billing {
-  id: string;
+  id: number;
   name: string;
   // Add other relevant properties of the billing model
 }

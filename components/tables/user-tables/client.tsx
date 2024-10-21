@@ -12,7 +12,7 @@ interface UserClientProps {
   data: Billing[];
 }
 export interface Billing {
-  id: string;
+  id: number;
   name: string;
   // Add other relevant properties of the billing model
 }
