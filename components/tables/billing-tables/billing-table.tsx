@@ -12,7 +12,7 @@ interface ProductsClientProps {
   data: Billing[];
 }
 
-export const Billing: React.FC<ProductsClientProps> = ({ data }) => {
+export const BillingPage: React.FC<ProductsClientProps> = ({ data }) => {
   const router = useRouter();
 
   return (
