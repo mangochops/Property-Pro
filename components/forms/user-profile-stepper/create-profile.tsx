@@ -1,4 +1,5 @@
 'use client';
+'use client';
 import {
   Accordion,
   AccordionContent,
@@ -27,13 +28,13 @@ import { Separator } from '@/components/ui/separator';
 import { profileSchema, type ProfileFormValues } from '@/lib/form-schema';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertTriangleIcon, Trash, Trash2Icon } from 'lucide-react';
+import { Trash } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface ProfileFormType {
-  initialData: any | null;
+  initialData: ProfileFormValues | null;
   categories: any;
 }
 
@@ -46,16 +47,24 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const title = initialData ? 'Edit product' : 'Create Your Profile';
+  const title = initialData ? 'Edit Profile' : 'Create Your Profile';
   const description = initialData
-    ? 'Edit a product.'
+    ? 'Edit your profile details.'
     : 'To create your resume, we first need some basic information about you.';
 
   const action = initialData ? 'Save changes' : 'Create';
 
+  // Define defaultValues using initialData if available
+  const defaultValues: ProfileFormValues = initialData || {
+    firstname: '',
+    lastname: '',
+    email: '',
+    contactno: ''
+  };
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
-    defaultValues,
+    defaultValues, // Passing default values
     mode: 'onChange'
   });
 
@@ -64,44 +73,10 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
     formState: { errors }
   } = form;
 
-  const onSubmit = async (data: ProfileFormValues) => {
-    try {
-      setLoading(true);
-      if (initialData) {
-        // await axios.post(`/api/products/edit-product/${initialData._id}`, data);
-      } else {
-        // const res = await axios.post(`/api/products/create-product`, data);
-        // console.log("product", res);
-      }
-      router.refresh();
-      router.push(`/dashboard/products`);
-    } catch (error: any) {
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const onDelete = async () => {
-    try {
-      setLoading(true);
-      //   await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
-      router.refresh();
-      router.push(`/${params.storeId}/products`);
-    } catch (error: any) {
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
-  };
-
   const processForm: SubmitHandler<ProfileFormValues> = (data) => {
     console.log('data ==>', data);
-    setData(data);
-    // api call and reset
-    // form.reset();
+    // API call or action to handle the form submission
   };
-
-  type FieldName = keyof ProfileFormValues;
 
   return (
     <>
@@ -124,90 +99,84 @@ export const CreateProfileOne: React.FC<ProfileFormType> = ({
           onSubmit={form.handleSubmit(processForm)}
           className="w-full space-y-8 rounded-lg bg-white p-6 shadow-md dark:bg-gray-900"
         >
-          <div
-            className={cn(
-              currentStep === 1
-                ? 'w-full md:inline-block'
-                : 'gap-8 md:grid md:grid-cols-2'
-            )}
-          >
-            {currentStep === 0 && (
-              <>
-                <FormField
-                  control={form.control}
-                  name="firstname"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder="John"
-                          {...field}
-                          className="dark:bg-gray-800 dark:text-gray-300"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="lastname"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder="Doe"
-                          {...field}
-                          className="dark:bg-gray-800 dark:text-gray-300"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          disabled={loading}
-                          placeholder="johndoe@gmail.com"
-                          {...field}
-                          className="dark:bg-gray-800 dark:text-gray-300"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="contactno"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Contact Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Enter your contact number"
-                          disabled={loading}
-                          {...field}
-                          className="dark:bg-gray-800 dark:text-gray-300"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </>
-            )}
+          <div className="gap-8 md:grid md:grid-cols-2">
+            {/* First Name */}
+            <FormField
+              control={form.control}
+              name="firstname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="John"
+                      {...field}
+                      className="dark:bg-gray-800 dark:text-gray-300"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Last Name */}
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Doe"
+                      {...field}
+                      className="dark:bg-gray-800 dark:text-gray-300"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="johndoe@gmail.com"
+                      {...field}
+                      className="dark:bg-gray-800 dark:text-gray-300"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Contact Number */}
+            <FormField
+              control={form.control}
+              name="contactno"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contact Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="Enter your contact number"
+                      disabled={loading}
+                      {...field}
+                      className="dark:bg-gray-800 dark:text-gray-300"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
           <Button
