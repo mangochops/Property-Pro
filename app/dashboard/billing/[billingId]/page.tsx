@@ -7,6 +7,12 @@ const breadcrumbItems = [
   { title: 'Dashboard', link: '/dashboard' },
   { title: 'Billing', link: '/dashboard/billing' }
 ];
+export interface Billing {
+  id: string;
+  name: string;
+  // Add other relevant properties of the billing model
+}
+
 export default function page() {
   return (
     <PageContainer>

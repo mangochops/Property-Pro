@@ -1,51 +1,24 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/ui/data-table';
 import { Heading } from '@/components/ui/heading';
 import { Separator } from '@/components/ui/separator';
 import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { columns } from './columns';
 
-export const UserClient = () => {
+// Define the props interface, assuming `data` is an array of `Billing[]`
+interface UserClientProps {
+  data: Billing[];
+}
+export interface Billing {
+  id: string;
+  name: string;
+  // Add other relevant properties of the billing model
+}
+
+export const UserClient: React.FC<UserClientProps> = ({ data }) => {
   const router = useRouter();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); // Set error type to string or null
-
-  // Fetch the data from the API endpoint
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/roles'); // Adjust the API route as necessary
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        const result = await response.json();
-        setData(result);
-      } catch (err) {
-        // Type narrowing: checking if err is an instance of Error
-        if (err instanceof Error) {
-          setError(err.message); // Safely access the message
-        } else {
-          setError('An unknown error occurred');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
 
   return (
     <>
